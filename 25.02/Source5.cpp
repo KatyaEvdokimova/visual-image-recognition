@@ -2,29 +2,29 @@
 #include <iostream>
 
 int main() {
-    // Загружаем изображение
-    cv::Mat image = cv::imread("C:/Users/Екатерина/Documents/kot.jpg", cv::IMREAD_COLOR);
+    // Р—Р°РіСЂСѓР¶Р°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ
+    cv::Mat image = cv::imread("C:/Users/Р•РєР°С‚РµСЂРёРЅР°/Documents/kot.jpg", cv::IMREAD_COLOR);
     if (image.empty()) {
-        std::cerr << "Ошибка: не удалось загрузить изображение!" << std::endl;
+        std::cerr << "РћС€РёР±РєР°: РЅРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ!" << std::endl;
         return -1;
     }
 
-    // Преобразуем в градации серого
+    // РџСЂРµРѕР±СЂР°Р·СѓРµРј РІ РіСЂР°РґР°С†РёРё СЃРµСЂРѕРіРѕ
     cv::Mat gray;
     cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
 
-    // Размытие для уменьшения шумов
+    // Р Р°Р·РјС‹С‚РёРµ РґР»СЏ СѓРјРµРЅСЊС€РµРЅРёСЏ С€СѓРјРѕРІ
     cv::GaussianBlur(gray, gray, cv::Size(5, 5), 1.5);
 
-    // Обнаружение границ с помощью Canny
+    // РћР±РЅР°СЂСѓР¶РµРЅРёРµ РіСЂР°РЅРёС† СЃ РїРѕРјРѕС‰СЊСЋ Canny
     cv::Mat edges;
     cv::Canny(gray, edges, 50, 150);
 
-    // Обнаружение линий методом Хафа
+    // РћР±РЅР°СЂСѓР¶РµРЅРёРµ Р»РёРЅРёР№ РјРµС‚РѕРґРѕРј РҐР°С„Р°
     std::vector<cv::Vec2f> lines;
     cv::HoughLines(edges, lines, 1, CV_PI / 180, 100);
 
-    // Рисуем линии на изображении
+    // Р РёСЃСѓРµРј Р»РёРЅРёРё РЅР° РёР·РѕР±СЂР°Р¶РµРЅРёРё
     for (size_t i = 0; i < lines.size(); i++) {
         float rho = lines[i][0], theta = lines[i][1];
         cv::Point pt1, pt2;
@@ -37,18 +37,18 @@ int main() {
         cv::line(image, pt1, pt2, cv::Scalar(0, 0, 255), 2);
     }
 
-    // Обнаружение кругов методом Хафа
+    // РћР±РЅР°СЂСѓР¶РµРЅРёРµ РєСЂСѓРіРѕРІ РјРµС‚РѕРґРѕРј РҐР°С„Р°
     std::vector<cv::Vec3f> circles;
     cv::HoughCircles(gray, circles, cv::HOUGH_GRADIENT, 1, gray.rows / 16, 100, 30, 10, 100);
 
-    // Рисуем круги на изображении
+    // Р РёСЃСѓРµРј РєСЂСѓРіРё РЅР° РёР·РѕР±СЂР°Р¶РµРЅРёРё
     for (size_t i = 0; i < circles.size(); i++) {
         cv::Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
         int radius = cvRound(circles[i][2]);
         cv::circle(image, center, radius, cv::Scalar(0, 255, 0), 2);
     }
 
-    // Отображаем результат
+    // РћС‚РѕР±СЂР°Р¶Р°РµРј СЂРµР·СѓР»СЊС‚Р°С‚
     cv::imshow("Detected Lines and Circles", image);
     cv::waitKey(0);
     return 0;
