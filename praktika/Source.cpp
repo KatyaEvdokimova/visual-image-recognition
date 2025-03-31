@@ -1,44 +1,69 @@
 #include <opencv2/opencv.hpp>
-#include <iostream>
+#include <vector>
 
 using namespace cv;
 using namespace std;
 
-//Р·Р°РіСЂСѓР·РєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+// Функция для обработки части изображения
+void processPart(Mat& part, int operationType) {
+    switch (operationType) {
+    case 0:  // Инверсия цветов
+        bitwise_not(part, part);
+        break;
+    case 1:  // Оттенки серого
+        cvtColor(part, part, COLOR_BGR2GRAY);
+        cvtColor(part, part, COLOR_GRAY2BGR);  // Возвращаем в BGR для корректного отображения
+        break;
+    case 2:  // Размытие (Gaussian blur)
+        GaussianBlur(part, part, Size(15, 15), 5);
+        break;
+    case 3:  // Выделение краёв (Canny edge detection)
+        Mat edges;
+        cvtColor(part, edges, COLOR_BGR2GRAY);
+        Canny(edges, edges, 100, 200);
+        cvtColor(edges, part, COLOR_GRAY2BGR);
+        break;
+    }
+}
+
 int main() {
-    setlocale(LC_ALL, "Ru");
-    Mat image = imread("C:/Users/Р•РєР°С‚РµСЂРёРЅР°/Documents/kot.jpg");
+    // Загрузка изображения
+    Mat image = imread("C:/Users/Екатерина/Documents/kot.jpg");
     if (image.empty()) {
-        cout << "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё РёР·РѕР±СЂР°Р¶РµРЅРёСЏ" << endl;
+        cout << "Ошибка: изображение не загружено!" << endl;
         return -1;
     }
-    // Р›РёРЅРёСЏ
-    line(image, Point(45, 300), Point(200, 3), Scalar(0, 255, 0), 2);
 
-    // РџСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє
-    rectangle(image, Point(200, 200), Point(400, 300), Scalar(255, 0, 0), 2);
+    // Проверка, можно ли разделить на 4 квадрата
+    if (image.rows != image.cols || image.rows % 2 != 0) {
+        cout << "Изображение должно быть квадратным и с чётными размерами!" << endl;
+        return -1;
+    }
 
-    // РљСЂСѓРі
-    circle(image, Point(250, 300), 50, Scalar(0, 0, 255), 2);
+    // Разделение на 4 квадрата
+    int halfSize = image.rows / 2;
+    vector<Mat> parts = {
+        image(Rect(0, 0, halfSize, halfSize)),                     // Верхний левый
+        image(Rect(halfSize, 0, halfSize, halfSize)),              // Верхний правый
+        image(Rect(0, halfSize, halfSize, halfSize)),               // Нижний левый
+        image(Rect(halfSize, halfSize, halfSize, halfSize))         // Нижний правый
+    };
 
-    // Р­Р»Р»РёРїСЃ
-    ellipse(image, Point(250, 400), Size(100, 50), 30, 0, 360, Scalar(0, 255, 255), 2);
+    // Обработка каждой части (можно менять операции)
+    processPart(parts[0], 0);  // Инверсия
+    processPart(parts[1], 1);  // Оттенки серого
+    processPart(parts[2], 2);  // Размытие
+    processPart(parts[3], 3);  // Выделение краёв
 
-    // РњРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРє
-    vector<Point> points;
-    points.push_back(Point(150, 350));
-    points.push_back(Point(200, 250));
-    points.push_back(Point(300, 250));
-    points.push_back(Point(350, 350));
-    const Point* pts[] = { points.data() };
-    int npts[] = { static_cast<int>(points.size()) };
-    polylines(image, pts, npts, 1, true, Scalar(255, 255, 255), 2);
+    // Объединение обратно в одно изображение
+    Mat topRow, bottomRow, result;
+    hconcat(parts[0], parts[1], topRow);
+    hconcat(parts[2], parts[3], bottomRow);
+    vconcat(topRow, bottomRow, result);
 
-    // РўРµРєСЃС‚
-    putText(image, "chill girl", Point(180, 470), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 2);
-
-    // РћС‚РѕР±СЂР°Р·РёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
-    imshow("Drawing", image);
+    // Отображение оригинального и обработанного изображений
+    imshow("Original Image", image);
+    imshow("Processed Image", result);
     waitKey(0);
 
     return 0;
