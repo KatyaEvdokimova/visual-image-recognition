@@ -4,20 +4,20 @@
 using namespace cv;
 using namespace std;
 
-// Функция для обработки части изображения
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё С‡Р°СЃС‚Рё РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 void processPart(Mat& part, int operationType) {
     switch (operationType) {
-    case 0:  // Инверсия цветов
+    case 0:  // РРЅРІРµСЂСЃРёСЏ С†РІРµС‚РѕРІ
         bitwise_not(part, part);
         break;
-    case 1:  // Оттенки серого
+    case 1:  // РћС‚С‚РµРЅРєРё СЃРµСЂРѕРіРѕ
         cvtColor(part, part, COLOR_BGR2GRAY);
-        cvtColor(part, part, COLOR_GRAY2BGR);  // Возвращаем в BGR для корректного отображения
+        cvtColor(part, part, COLOR_GRAY2BGR);  // Р’РѕР·РІСЂР°С‰Р°РµРј РІ BGR РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
         break;
-    case 2:  // Размытие (Gaussian blur)
+    case 2:  // Р Р°Р·РјС‹С‚РёРµ (Gaussian blur)
         GaussianBlur(part, part, Size(15, 15), 5);
         break;
-    case 3:  // Выделение краёв (Canny edge detection)
+    case 3:  // Р’С‹РґРµР»РµРЅРёРµ РєСЂР°С‘РІ (Canny edge detection)
         Mat edges;
         cvtColor(part, edges, COLOR_BGR2GRAY);
         Canny(edges, edges, 100, 200);
@@ -27,41 +27,41 @@ void processPart(Mat& part, int operationType) {
 }
 
 int main() {
-    // Загрузка изображения
-    Mat image = imread("C:/Users/Екатерина/Documents/kot.jpg");
+    // Р—Р°РіСЂСѓР·РєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+    Mat image = imread("C:/Users/Р•РєР°С‚РµСЂРёРЅР°/Documents/kot.jpg");
     if (image.empty()) {
-        cout << "Ошибка: изображение не загружено!" << endl;
+        cout << "РћС€РёР±РєР°: РёР·РѕР±СЂР°Р¶РµРЅРёРµ РЅРµ Р·Р°РіСЂСѓР¶РµРЅРѕ!" << endl;
         return -1;
     }
 
-    // Проверка, можно ли разделить на 4 квадрата
+    // РџСЂРѕРІРµСЂРєР°, РјРѕР¶РЅРѕ Р»Рё СЂР°Р·РґРµР»РёС‚СЊ РЅР° 4 РєРІР°РґСЂР°С‚Р°
     if (image.rows != image.cols || image.rows % 2 != 0) {
-        cout << "Изображение должно быть квадратным и с чётными размерами!" << endl;
+        cout << "РР·РѕР±СЂР°Р¶РµРЅРёРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РєРІР°РґСЂР°С‚РЅС‹Рј Рё СЃ С‡С‘С‚РЅС‹РјРё СЂР°Р·РјРµСЂР°РјРё!" << endl;
         return -1;
     }
 
-    // Разделение на 4 квадрата
+    // Р Р°Р·РґРµР»РµРЅРёРµ РЅР° 4 РєРІР°РґСЂР°С‚Р°
     int halfSize = image.rows / 2;
     vector<Mat> parts = {
-        image(Rect(0, 0, halfSize, halfSize)),                     // Верхний левый
-        image(Rect(halfSize, 0, halfSize, halfSize)),              // Верхний правый
-        image(Rect(0, halfSize, halfSize, halfSize)),               // Нижний левый
-        image(Rect(halfSize, halfSize, halfSize, halfSize))         // Нижний правый
+        image(Rect(0, 0, halfSize, halfSize)),                     // Р’РµСЂС…РЅРёР№ Р»РµРІС‹Р№
+        image(Rect(halfSize, 0, halfSize, halfSize)),              // Р’РµСЂС…РЅРёР№ РїСЂР°РІС‹Р№
+        image(Rect(0, halfSize, halfSize, halfSize)),               // РќРёР¶РЅРёР№ Р»РµРІС‹Р№
+        image(Rect(halfSize, halfSize, halfSize, halfSize))         // РќРёР¶РЅРёР№ РїСЂР°РІС‹Р№
     };
 
-    // Обработка каждой части (можно менять операции)
-    processPart(parts[0], 0);  // Инверсия
-    processPart(parts[1], 1);  // Оттенки серого
-    processPart(parts[2], 2);  // Размытие
-    processPart(parts[3], 3);  // Выделение краёв
+    // РћР±СЂР°Р±РѕС‚РєР° РєР°Р¶РґРѕР№ С‡Р°СЃС‚Рё (РјРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ РѕРїРµСЂР°С†РёРё)
+    processPart(parts[0], 0);  // РРЅРІРµСЂСЃРёСЏ
+    processPart(parts[1], 1);  // РћС‚С‚РµРЅРєРё СЃРµСЂРѕРіРѕ
+    processPart(parts[2], 2);  // Р Р°Р·РјС‹С‚РёРµ
+    processPart(parts[3], 3);  // Р’С‹РґРµР»РµРЅРёРµ РєСЂР°С‘РІ
 
-    // Объединение обратно в одно изображение
+    // РћР±СЉРµРґРёРЅРµРЅРёРµ РѕР±СЂР°С‚РЅРѕ РІ РѕРґРЅРѕ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
     Mat topRow, bottomRow, result;
     hconcat(parts[0], parts[1], topRow);
     hconcat(parts[2], parts[3], bottomRow);
     vconcat(topRow, bottomRow, result);
 
-    // Отображение оригинального и обработанного изображений
+    // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ Рё РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёР№
     imshow("Original Image", image);
     imshow("Processed Image", result);
     waitKey(0);
