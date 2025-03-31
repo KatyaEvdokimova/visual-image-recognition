@@ -4,27 +4,27 @@
 using namespace cv;
 using namespace std;
 
-//загрузка изображения
+//Р·Р°РіСЂСѓР·РєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 int main() {
     setlocale(LC_ALL, "Ru");
-    Mat image = imread("C:/Users/Екатерина/Documents/kot.jpg");
+    Mat image = imread("C:/Users/Р•РєР°С‚РµСЂРёРЅР°/Documents/kot.jpg");
     if (image.empty()) {
-        cout << "Ошибка загрузки изображения" << endl;
+        cout << "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё РёР·РѕР±СЂР°Р¶РµРЅРёСЏ" << endl;
         return -1;
     }
-    // Линия
+    // Р›РёРЅРёСЏ
     line(image, Point(45, 300), Point(200, 3), Scalar(0, 255, 0), 2);
 
-    // Прямоугольник
+    // РџСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє
     rectangle(image, Point(200, 200), Point(400, 300), Scalar(255, 0, 0), 2);
 
-    // Круг
+    // РљСЂСѓРі
     circle(image, Point(250, 300), 50, Scalar(0, 0, 255), 2);
 
-    // Эллипс
+    // Р­Р»Р»РёРїСЃ
     ellipse(image, Point(250, 400), Size(100, 50), 30, 0, 360, Scalar(0, 255, 255), 2);
 
-    // Многоугольник
+    // РњРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРє
     vector<Point> points;
     points.push_back(Point(150, 350));
     points.push_back(Point(200, 250));
@@ -34,10 +34,10 @@ int main() {
     int npts[] = { static_cast<int>(points.size()) };
     polylines(image, pts, npts, 1, true, Scalar(255, 255, 255), 2);
 
-    // Текст
+    // РўРµРєСЃС‚
     putText(image, "chill girl", Point(180, 470), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 2);
 
-    // Отобразить изображение
+    // РћС‚РѕР±СЂР°Р·РёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
     imshow("Drawing", image);
     waitKey(0);
 
