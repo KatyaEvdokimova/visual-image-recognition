@@ -5,10 +5,10 @@ using namespace cv;
 using namespace std;
 
 int main() {
-    // Открываем видеофайл
-    VideoCapture cap("C:\\Users\\Екатерина\\Downloads\\video.mp4");
+    
+    VideoCapture cap("C:\\Users\\Р•РєР°С‚РµСЂРёРЅР°\\Downloads\\video.mp4");
     if (!cap.isOpened()) {
-        cout << "Ошибка: не удалось открыть видеофайл!" << endl;
+        cout << "РћС€РёР±РєР°" << endl;
         return -1;
     }
 
@@ -17,28 +17,28 @@ int main() {
     vector<Vec4i> hierarchy;
 
     while (true) {
-        cap >> frame; // Читаем кадр
-        if (frame.empty()) break; // Если видео закончилось — выходим
+        cap >> frame; // Р§РёС‚Р°РµРј РєР°РґСЂ
+        if (frame.empty()) break; // Р•СЃР»Рё РІРёРґРµРѕ Р·Р°РєРѕРЅС‡РёР»РѕСЃСЊ вЂ” РІС‹С…РѕРґРёРј
 
-        // Копия кадра для рисования контуров
+        // РљРѕРїРёСЏ РєР°РґСЂР° РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ РєРѕРЅС‚СѓСЂРѕРІ
         contourImg = frame.clone();
 
-        // Преобразование в оттенки серого и обработка контуров
+        // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ РѕС‚С‚РµРЅРєРё СЃРµСЂРѕРіРѕ Рё РѕР±СЂР°Р±РѕС‚РєР° РєРѕРЅС‚СѓСЂРѕРІ
         cvtColor(frame, gray, COLOR_BGR2GRAY);
-        GaussianBlur(gray, blurred, Size(5, 5), 0);  // Размытие
-        Canny(blurred, edges, 50, 150);  // Выделение границ
+        GaussianBlur(gray, blurred, Size(5, 5), 0);  // Р Р°Р·РјС‹С‚РёРµ
+        Canny(blurred, edges, 50, 150);  // Р’С‹РґРµР»РµРЅРёРµ РіСЂР°РЅРёС†
 
-        // Поиск контуров
+        // РџРѕРёСЃРє РєРѕРЅС‚СѓСЂРѕРІ
         findContours(edges, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
-        // Рисуем контуры на исходном видео (contourImg)
-        drawContours(contourImg, contours, -1, Scalar(0, 255, 0), 2); // Зеленые контуры
+        // Р РёСЃСѓРµРј РєРѕРЅС‚СѓСЂС‹ РЅР° РёСЃС…РѕРґРЅРѕРј РІРёРґРµРѕ (contourImg)
+        drawContours(contourImg, contours, -1, Scalar(0, 255, 0), 2); // Р—РµР»РµРЅС‹Рµ РєРѕРЅС‚СѓСЂС‹
 
-        // Отображение видео с контурами и отдельного окна с обработкой
-        imshow("Video Tracking", contourImg); // Окно с видео и нарисованными контурами
-        imshow("Edges", edges); // Окно с обработанным изображением (границы)
+        // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РІРёРґРµРѕ СЃ РєРѕРЅС‚СѓСЂР°РјРё Рё РѕС‚РґРµР»СЊРЅРѕРіРѕ РѕРєРЅР° СЃ РѕР±СЂР°Р±РѕС‚РєРѕР№
+        imshow("Video Tracking", contourImg); // РћРєРЅРѕ СЃ РІРёРґРµРѕ Рё РЅР°СЂРёСЃРѕРІР°РЅРЅС‹РјРё РєРѕРЅС‚СѓСЂР°РјРё
+        imshow("Edges", edges); // РћРєРЅРѕ СЃ РѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹Рј РёР·РѕР±СЂР°Р¶РµРЅРёРµРј (РіСЂР°РЅРёС†С‹)
 
-        // Выход при нажатии 'q'
+        // Р’С‹С…РѕРґ РїСЂРё РЅР°Р¶Р°С‚РёРё 'q'
         if (waitKey(30) == 'q') break;
     }
 
