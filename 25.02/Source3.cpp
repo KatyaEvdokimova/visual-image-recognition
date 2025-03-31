@@ -5,23 +5,23 @@ using namespace cv;
 using namespace std;
 
 int main() {
-    Mat image = imread("C:/Users/Екатерина/Documents/kot.jpg");
+    Mat image = imread("C:/Users/Р•РєР°С‚РµСЂРёРЅР°/Documents/kot.jpg");
     if (image.empty()) {
-        cerr << "Ошибка: Не удалось загрузить изображение!" << endl;
+        cerr << "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ!" << endl;
         return -1;
     }
 
-    // Создание матриц для хранения преобразованных изображений
+    // РЎРѕР·РґР°РЅРёРµ РјР°С‚СЂРёС† РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРЅС‹С… РёР·РѕР±СЂР°Р¶РµРЅРёР№
     Mat imageHSV, imageLab, imageYUV, imageXYZ, imageGray;
 
-    // Преобразование в различные цветовые пространства
+    // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ СЂР°Р·Р»РёС‡РЅС‹Рµ С†РІРµС‚РѕРІС‹Рµ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР°
     cvtColor(image, imageHSV, COLOR_BGR2HSV);
     cvtColor(image, imageLab, COLOR_BGR2Lab);
     cvtColor(image, imageYUV, COLOR_BGR2YUV);
     cvtColor(image, imageXYZ, COLOR_BGR2XYZ);
     cvtColor(image, imageGray, COLOR_BGR2GRAY);
 
-    // Отображение изображений
+    // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёР№
     imshow("Original Image", image);
     imshow("HSV Image", imageHSV);
     imshow("Lab Image", imageLab);
@@ -29,7 +29,7 @@ int main() {
     imshow("XYZ Image", imageXYZ);
     imshow("Gray Image", imageGray);
 
-    // Ожидание нажатия клавиши
+    // РћР¶РёРґР°РЅРёРµ РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€Рё
     waitKey(0);
     return 0;
 }
