@@ -24,9 +24,9 @@ std::string getShapeName(std::vector<cv::Point> contour) {
 
 int main() {
     
-    cv::Mat src = cv::imread("C:\\Users\\Екатерина\\Pictures\\figures.png");
+    cv::Mat src = cv::imread("C:\\Users\\Р•РєР°С‚РµСЂРёРЅР°\\Pictures\\figures.png");
     if (src.empty()) {
-        std::cerr << "Ошибка: не удалось загрузить изображение!" << std::endl;
+        std::cerr << "РћС€РёР±РєР°: РЅРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ!" << std::endl;
         return -1;
     }
 
@@ -70,8 +70,8 @@ int main() {
     }
 
    
-    cv::imshow("Исходное изображение", src);
-    cv::imshow("Контуры", contourOutput);
+    cv::imshow("РСЃС…РѕРґРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ", src);
+    cv::imshow("РљРѕРЅС‚СѓСЂС‹", contourOutput);
     cv::waitKey(0);
 
     return 0;
