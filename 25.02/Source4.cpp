@@ -5,22 +5,22 @@ using namespace cv;
 using namespace std;
 
 int main() {
-    // Загружаем изображение
-    Mat image = imread("C:/Users/Екатерина/Documents/kot.jpg");
+    // Р—Р°РіСЂСѓР¶Р°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ
+    Mat image = imread("C:/Users/Р•РєР°С‚РµСЂРёРЅР°/Documents/kot.jpg");
     if (image.empty()) {
         cerr << "Error: Could not open or find the image!" << endl;
         return -1;
     }
 
-    // Преобразуем в оттенки серого
+    // РџСЂРµРѕР±СЂР°Р·СѓРµРј РІ РѕС‚С‚РµРЅРєРё СЃРµСЂРѕРіРѕ
     Mat grayImage;
     cvtColor(image, grayImage, COLOR_BGR2GRAY);
 
-    // Применяем фильтр Гаусса
+    // РџСЂРёРјРµРЅСЏРµРј С„РёР»СЊС‚СЂ Р“Р°СѓСЃСЃР°
     Mat blurredImage;
     GaussianBlur(grayImage, blurredImage, Size(5, 5), 0);
 
-    // Показываем изображения
+    // РџРѕРєР°Р·С‹РІР°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
     imshow("Gray Image", grayImage);
     imshow("Gauss Image", blurredImage);
     waitKey(0);
