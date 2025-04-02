@@ -7,53 +7,51 @@ using namespace cv;
 using namespace std;
 
 int main() {
-    // Загрузка изображений
-    Mat img1 = imread("C:\\Users\\Екатерина\\Downloads\\image1.png");
-    Mat img2 = imread("C:\\Users\\Екатерина\\Downloads\\image2.png");
+    Mat img1 = imread("C:\\Users\\Р•РєР°С‚РµСЂРёРЅР°\\Downloads\\image1.png");
+    Mat img2 = imread("C:\\Users\\Р•РєР°С‚РµСЂРёРЅР°\\Downloads\\image2.png");
     if (img1.empty() || img2.empty()) {
-        cerr << "Ошибка загрузки изображений" << endl;
+        cerr << "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё РёР·РѕР±СЂР°Р¶РµРЅРёР№" << endl;
         return -1;
     }
 
-    // Обнаружение ключевых точек и вычисление дескрипторов с помощью ORB
+    // РћР±РЅР°СЂСѓР¶РµРЅРёРµ РєР»СЋС‡РµРІС‹С… С‚РѕС‡РµРє Рё РІС‹С‡РёСЃР»РµРЅРёРµ РґРµСЃРєСЂРёРїС‚РѕСЂРѕРІ СЃ РїРѕРјРѕС‰СЊСЋ ORB
     Ptr<ORB> orb = ORB::create();
     vector<KeyPoint> keypoints1, keypoints2;
     Mat descriptors1, descriptors2;
     orb->detectAndCompute(img1, noArray(), keypoints1, descriptors1);
     orb->detectAndCompute(img2, noArray(), keypoints2, descriptors2);
 
-    // Поиск соответствий с помощью Brute-Force Matcher
+  
     BFMatcher matcher(NORM_HAMMING);
     vector<DMatch> matches;
     matcher.match(descriptors1, descriptors2, matches);
 
-    // Отбор лучших соответствий
+  
     sort(matches.begin(), matches.end(), [](const DMatch& a, const DMatch& b) {
         return a.distance < b.distance;
         });
-    matches.resize(50); // Берём только 50 лучших совпадений
+    matches.resize(50); 
 
-    // Создание списков соответствующих точек
     vector<Point2f> points1, points2;
     for (const auto& match : matches) {
         points1.push_back(keypoints1[match.queryIdx].pt);
         points2.push_back(keypoints2[match.trainIdx].pt);
     }
 
-    // Вычисление матрицы гомографии с использованием RANSAC
+ 
     Mat H = findHomography(points2, points1, RANSAC);
 
-    // Применение перспективного преобразования
+    // РџСЂРёРјРµРЅРµРЅРёРµ РїРµСЂСЃРїРµРєС‚РёРІРЅРѕРіРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
     Mat result;
     warpPerspective(img2, result, H, Size(img1.cols + img2.cols, img1.rows));
     Mat roi(result, Rect(0, 0, img1.cols, img1.rows));
     img1.copyTo(roi);
 
-    // Отображение и сохранение результата
+    // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ Рё СЃРѕС…СЂР°РЅРµРЅРёРµ СЂРµР·СѓР»СЊС‚Р°С‚Р°
     imshow("Panorama", result);
     imwrite("panorama.jpg", result);
 
-    // Отображение соответствий ключевых точек
+    // РћС‚РѕР±СЂР°Р¶РµРЅРёРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёР№ РєР»СЋС‡РµРІС‹С… С‚РѕС‡РµРє
     Mat img_matches;
     drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matches);
     imshow("Matches", img_matches);
